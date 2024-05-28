@@ -9,6 +9,7 @@ function Demo() {
   });
   const [allArticles, setAllArticles] = useState([]);
   const [copied, setCopied] = useState("");
+  const [language, setLanguage] = useState("en");
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
   // Load data from localStorage on mount
   useEffect(() => {
@@ -23,7 +24,14 @@ function Demo() {
 
   const handelSUbmit = async (e) => {
     e.preventDefault();
-    const { data } = await getSummary({ articleUrl: article.url });
+    const existingArticle = allArticles.find(
+      (item) => item.url === article.url
+    );
+    if (existingArticle) return setArticle(existingArticle);
+    const { data } = await getSummary({
+      articleUrl: article.url,
+      language: language,
+    });
     if (data?.summary) {
       const newArticle = { ...article, summary: data.summary };
       const updatedAllArticles = [newArticle, ...allArticles];
@@ -48,13 +56,13 @@ function Demo() {
     <section className="mt-16 w-full max-w-xl">
       <div className="flex flex-col w-full gap-2">
         <form
-          className="relative flex justify-center items-center"
+          className="relative flex flex-col gap-3 justify-center items-center"
           onSubmit={handelSUbmit}
         >
           <img
             src={linkIcon}
             alt="link-icon"
-            className="absolute left-0 my-2 ml-3 w-5"
+            className="absolute left-0 my-2 ml-3 w-5 top-[4px]"
           />
 
           <input
@@ -68,10 +76,32 @@ function Demo() {
           />
           <button
             type="submit"
-            className="submit_btn peer-focus:border-gray-700 peer-focus:text-gray-700 "
+            className="submit_btn peer-focus:border-gray-700 peer-focus:text-gray-700"
           >
             <p>↵</p>
           </button>
+          <select
+            id="countries"
+            className="lang_input p-2.5"
+            onChange={(e) => setLanguage(e.target.value)}
+          >
+            <option value="en">English</option>
+            <option disabled>────────────</option>
+            <option value="ar">Arabic</option>
+            <option value="ca">Catalan</option>
+            <option value="zh">Chinese</option>
+            <option value="de">Deutsch</option>
+            <option value="es">Espa&#241;ol</option>
+            <option value="fr">Fran&#231;ais</option>
+            <option value="el">Greek</option>
+            <option value="he">Hebrew</option>
+            <option value="hi">Hindi</option>
+            <option value="it">Italian</option>
+            <option value="ja">Japanese</option>
+            <option value="pt">Portugu&#234;s</option>
+            <option value="ru">Russian</option>
+            <option value="uk">Ukranian</option>
+          </select>
         </form>
         {/* Browse url history */}
         <div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
