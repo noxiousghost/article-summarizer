@@ -10,7 +10,7 @@ Welcome to the Article Summarizer! This React application, built with Vite, allo
 
 ## Demo
 
-Check out the live demo [here](ai.sapkotanarayan.com.np).
+Check out the live demo [here](summarize.sapkotanarayan.com.np).
 
 ## Installation
 
